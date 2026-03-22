@@ -1,0 +1,42 @@
+{
+  "name": "happylive-report",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.ts",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.3",
+    "echarts": "^6.0.0",
+    "less": "^4.6.4",
+    "naive-ui": "^2.44.1",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.29",
+    "vue-echarts": "^8.0.1",
+    "vue-router": "^5.0.4",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
+    "@vicons/carbon": "^0.13.0",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "eslint": "^10.1.0",
+    "eslint-plugin-vue": "^10.8.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-vue-devtools": "^8.0.6",
+    "vue-tsc": "^3.2.6"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

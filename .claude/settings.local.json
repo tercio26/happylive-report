@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(node -e \":*)",
+      "Read(//mnt/e/Projects/**)",
+      "Bash(npm install:*)",
+      "Bash(cd:*)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(timeout 10 npm run dev)"
+    ]
+  }
+}
