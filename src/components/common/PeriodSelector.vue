@@ -91,8 +91,12 @@
   }
 
   .period-label {
-    min-width: 10rem;
+    min-width: 8rem;
     text-align: center;
     font-weight: 500;
+
+    @media (max-width: 480px) {
+      min-width: 0;
+    }
   }
 </style>

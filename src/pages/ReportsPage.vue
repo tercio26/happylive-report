@@ -626,13 +626,27 @@
     h2 {
       margin: 0;
     }
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   .header-controls {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
+
+    @media (max-width: 640px) {
+      width: 100%;
+
+      :deep(.n-select) {
+        flex: 1;
+        min-width: 0;
+      }
+    }
   }
 
   .label-toggle {
@@ -659,5 +673,14 @@
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
+
+    @media (max-width: 640px) {
+      width: 100%;
+
+      :deep(.n-select),
+      :deep(.n-date-picker) {
+        width: 100% !important;
+      }
+    }
   }
 </style>

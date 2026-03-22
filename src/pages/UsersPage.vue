@@ -17,7 +17,7 @@
     />
 
     <!-- Add / Edit Drawer -->
-    <n-drawer v-model:show="drawerVisible" :width="420" placement="right">
+    <n-drawer v-model:show="drawerVisible" :width="Math.min(420, windowWidth)" placement="right">
       <n-drawer-content :title="isEditMode ? 'Chỉnh sửa người dùng' : 'Thêm người dùng'" closable>
         <n-form ref="formRef" :model="form" :rules="rules" label-placement="top">
           <template v-if="!isEditMode">
@@ -123,6 +123,7 @@
 
     data() {
       return {
+        windowWidth: window.innerWidth,
         loading: false,
         users: [] as UserProfile[],
         drawerVisible: false,

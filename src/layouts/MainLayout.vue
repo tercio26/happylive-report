@@ -94,7 +94,23 @@
     data() {
       return {
         collapsed: false,
+        isMobile: false,
+        resizeHandler: null as (() => void) | null,
       }
+    },
+
+    mounted() {
+      this.isMobile = window.innerWidth < 768
+      if (this.isMobile) this.collapsed = true
+      this.resizeHandler = () => {
+        this.isMobile = window.innerWidth < 768
+        if (this.isMobile) this.collapsed = true
+      }
+      window.addEventListener('resize', this.resizeHandler)
+    },
+
+    beforeUnmount() {
+      if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler)
     },
 
     computed: {
@@ -305,5 +321,9 @@
     padding: 1.75rem;
     overflow: auto;
     background: #F2F1FA;
+
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
   }
 </style>

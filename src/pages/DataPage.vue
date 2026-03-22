@@ -58,7 +58,7 @@
     />
 
     <!-- Drawer: Add / Edit -->
-    <n-drawer v-model:show="drawerVisible" :width="480" placement="right">
+    <n-drawer v-model:show="drawerVisible" :width="drawerWidth" placement="right">
       <n-drawer-content :title="editingRow ? 'Chỉnh sửa dữ liệu' : 'Thêm dữ liệu'" closable>
         <n-form ref="formRef" :model="form" :rules="formRules" label-placement="top">
           <n-form-item label="Ngày báo cáo" path="report_date">
@@ -239,6 +239,10 @@
           showQuickJumper: true,
         }
       },
+      drawerWidth(): number {
+        return Math.min(480, window.innerWidth)
+      },
+
       canManage(): boolean {
         return this.authStore.hasPermission('manage_data')
       },
@@ -456,6 +460,14 @@
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
+
+    @media (max-width: 640px) {
+      :deep(.n-date-picker),
+      :deep(.n-select),
+      :deep(.n-input) {
+        width: 100% !important;
+      }
+    }
   }
 
   .drawer-footer {

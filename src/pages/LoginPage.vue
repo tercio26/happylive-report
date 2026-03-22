@@ -89,6 +89,7 @@
     justify-content: center;
     background: linear-gradient(135deg, #0D0B1E 0%, #1A1040 30%, #0E1535 60%, #091828 100%);
     gap: 1.5rem;
+    padding: 1.5rem;
   }
 
   .login-logo img {
@@ -98,7 +99,7 @@
   }
 
   .login-card {
-    width: 23.75rem;
+    width: min(23.75rem, 100%);
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(124, 109, 250, 0.12) !important;
     border: 1px solid rgba(124, 109, 250, 0.15) !important;
   }
