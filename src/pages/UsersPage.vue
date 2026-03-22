@@ -79,7 +79,7 @@
     NH2, NButton, NIcon, NDataTable, NDrawer, NDrawerContent,
     NForm, NFormItem, NInput, NCheckboxGroup, NCheckbox, NSpace,
     NModal, NTag, NText, useMessage,
-    type FormInst, type DataTableColumns,
+    type FormInst, type DataTableColumns, type FormRules,
   } from 'naive-ui'
   import { Add as AddIcon, Edit as EditIcon, TrashCan as DeleteIcon } from '@vicons/carbon'
   import {
@@ -136,13 +136,13 @@
         rules: {
           email: [
             { required: true, message: 'Nhập email', trigger: 'blur' },
-            { type: 'email', message: 'Email không hợp lệ', trigger: 'blur' },
+            { type: 'email' as const, message: 'Email không hợp lệ', trigger: 'blur' },
           ],
           password: [
             { required: true, message: 'Nhập mật khẩu', trigger: 'blur' },
             { min: 6, message: 'Tối thiểu 6 ký tự', trigger: 'blur' },
           ],
-        },
+        } as FormRules,
       }
     },
 
