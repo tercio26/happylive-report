@@ -22,7 +22,7 @@
         <n-form ref="formRef" :model="form" :rules="rules" label-placement="top">
           <template v-if="!isEditMode">
             <n-form-item label="Email" path="email">
-              <n-input v-model:value="form.email" placeholder="example@company.com" />
+              <n-input v-model:value="form.email" placeholder="example@company.com" autocomplete="off" />
             </n-form-item>
             <n-form-item label="Mật khẩu" path="password">
               <n-input
@@ -30,6 +30,7 @@
                 type="password"
                 show-password-on="click"
                 placeholder="Tối thiểu 6 ký tự"
+                autocomplete="new-password"
               />
             </n-form-item>
           </template>
