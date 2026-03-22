@@ -1,4 +1,3 @@
-import { supabaseAdmin } from './supabase-admin'
 import { supabase } from './supabase'
 import type { PermissionKey } from '@/types'
 
@@ -10,14 +9,31 @@ export interface UserProfile {
   permissions: PermissionKey[]
 }
 
-export async function listUsers(): Promise<UserProfile[]> {
-  const [{ data: authData, error: authError }, { data: permsData, error: permsError }] =
-    await Promise.all([
-      supabaseAdmin.auth.admin.listUsers({ perPage: 1000 }),
-      supabase.from('user_permissions').select('user_id, permission_key'),
-    ])
+async function adminFetch(method: string, body?: object): Promise<Response> {
+  const { data: { session } } = await supabase.auth.getSession()
+  return fetch('/api/admin-users', {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session?.access_token ?? ''}`,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+}
 
-  if (authError) throw new Error(authError.message)
+async function checkResponse(res: Response): Promise<unknown> {
+  const json = await res.json()
+  if (!res.ok) throw new Error((json as { error?: string }).error ?? `HTTP ${res.status}`)
+  return json
+}
+
+export async function listUsers(): Promise<UserProfile[]> {
+  const [res, { data: permsData, error: permsError }] = await Promise.all([
+    adminFetch('GET'),
+    supabase.from('user_permissions').select('user_id, permission_key'),
+  ])
+
+  const authUsers = await checkResponse(res) as { id: string; email?: string; user_metadata?: { display_name?: string }; created_at: string }[]
   if (permsError) throw new Error(permsError.message)
 
   const permsMap: Record<string, PermissionKey[]> = {}
@@ -26,10 +42,10 @@ export async function listUsers(): Promise<UserProfile[]> {
     permsMap[p.user_id].push(p.permission_key as PermissionKey)
   }
 
-  return authData.users.map((u) => ({
+  return authUsers.map((u) => ({
     id: u.id,
     email: u.email ?? '',
-    display_name: (u.user_metadata?.display_name as string) ?? '',
+    display_name: u.user_metadata?.display_name ?? '',
     created_at: u.created_at,
     permissions: permsMap[u.id] ?? [],
   }))
@@ -41,15 +57,10 @@ export async function createUser(
   displayName: string,
   permissions: PermissionKey[],
 ): Promise<void> {
-  const { data, error } = await supabaseAdmin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: { display_name: displayName },
-  })
-  if (error) throw new Error(error.message)
-  if (data.user && permissions.length) {
-    await setUserPermissions(data.user.id, permissions)
+  const res = await adminFetch('POST', { email, password, display_name: displayName })
+  const data = await checkResponse(res) as { id: string }
+  if (permissions.length) {
+    await setUserPermissions(data.id, permissions)
   }
 }
 
@@ -58,16 +69,14 @@ export async function updateUser(
   displayName: string,
   permissions: PermissionKey[],
 ): Promise<void> {
-  const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-    user_metadata: { display_name: displayName },
-  })
-  if (error) throw new Error(error.message)
+  const res = await adminFetch('PUT', { userId, display_name: displayName })
+  await checkResponse(res)
   await setUserPermissions(userId, permissions)
 }
 
 export async function deleteUser(userId: string): Promise<void> {
-  const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
-  if (error) throw new Error(error.message)
+  const res = await adminFetch('DELETE', { userId })
+  await checkResponse(res)
 }
 
 export async function setUserPermissions(userId: string, permissions: PermissionKey[]): Promise<void> {
