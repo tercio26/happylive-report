@@ -21,13 +21,13 @@ function fmt(d: Date): string {
 export function getWeekRange(offset = 0): PeriodRange {
   const now = new Date()
   const dow = now.getDay()
-  const diff = dow === 0 ? -6 : 1 - dow   // offset to Monday
-  const mon = new Date(now)
-  mon.setHours(0, 0, 0, 0)
-  mon.setDate(now.getDate() + diff + offset * 7)
-  const sun = new Date(mon)
-  sun.setDate(mon.getDate() + 6)
-  return { start: toISO(mon), end: toISO(sun), label: `${fmt(mon)} – ${fmt(sun)}/${sun.getFullYear()}` }
+  const diff = -((dow + 1) % 7)   // offset to most recent Saturday
+  const sat = new Date(now)
+  sat.setHours(0, 0, 0, 0)
+  sat.setDate(now.getDate() + diff + offset * 7)
+  const fri = new Date(sat)
+  fri.setDate(sat.getDate() + 6)
+  return { start: toISO(sat), end: toISO(fri), label: `${fmt(sat)} – ${fmt(fri)}/${fri.getFullYear()}` }
 }
 
 export function getMonthRange(offset = 0): PeriodRange {
